@@ -1,7 +1,9 @@
 @REM Generating JAR file
 @echo off
 echo.
+echo =====================================================================
 echo Generating Java Project JAR file with Maven...
+echo =====================================================================
 echo.
-SET MAVEN_CMD=mvn clean package
-%MAVEN_CMD%
+call mvn clean
+call mvn package
