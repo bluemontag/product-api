@@ -1,6 +1,7 @@
 package com.textplus.productapi;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -77,4 +78,10 @@ public class TestUtils {
         assertArrayEquals(orderCodes.toArray(), productsCodes.toArray());
     }
 
+    public static void assertContainTheSameProducts(List<Product> list1, List<Product> list2) {
+        // for each product in the first list, check if it exists in the second
+        list1.forEach( prod -> {
+            assertTrue(list2.contains(prod));
+        });
+    }
 }
