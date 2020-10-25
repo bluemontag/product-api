@@ -17,30 +17,41 @@ public class OrderTests {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Test
-    public void givenAListOfProductsWhenCreatingAnOrderThenHasRightPropertiesTest() {
-        // Given a list of products
-        List<Product> products = TestUtils.createRandomProductList(50);
-        // a date
+    public void givenOrderDataWhenCreatingThenHasRightPropertiesTest() {
+        // Given a date
         Date purchaseDate = new Date();
         // a buyer's email
         String email = "harry@email.com";
-        // And an order
+        
+        // When creating an order
         Order order = new Order(email, purchaseDate);
-
-        // When adding a list of products to the order
-        order.addProducts(products);
 
         // Then
         // it has the buyer's email
         assertEquals(email, order.getBuyersEmail());
         // it has the same purchase date
         assertEquals(purchaseDate, order.getPurchaseDate());
-        // it has the same products
+        
+        logger.log(Level.INFO, "Test passed.");
+    }
+
+    @Test
+    public void givenAnOrderWhenAddingProductsThenHasProductsWithSamePrices() {
+        // Given a list of products
+        List<Product> products = TestUtils.createRandomProductList(50);
+        // and an order
+        Order order = new Order("harry@email.com", new Date());
+
+        // When adding products to the order:
+        order.addProducts(products);
+
+        // Then it has the same products
         TestUtils.assertOrderHasProducts(order, products);
         // at the same prices
         TestUtils.assertOrderHasProductPrices(order, products);
 
         logger.log(Level.INFO, "Test passed.");
     }
+
 
 }

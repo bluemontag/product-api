@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -19,6 +20,18 @@ public class TestUtils {
     private static Logger logger = Logger.getLogger(TestUtils.class.getName());
     
     private static Random random = new Random();
+
+
+    public static Order createARandomOrder(int size) {
+
+        Order order = new Order("email@domain.com", new Date());
+        List<Product> products = createRandomProductList(size);
+
+        order.addProducts(products);
+        
+        return order;
+    }
+
 
     public static List<Product> createRandomProductList(int maxLen) {
         List<Product> result = new ArrayList<>();

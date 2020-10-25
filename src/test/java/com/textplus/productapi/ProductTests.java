@@ -1,21 +1,13 @@
 package com.textplus.productapi;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import com.textplus.productapi.model.Order;
 import com.textplus.productapi.model.Product;
-import com.textplus.productapi.model.ProductInOrder;
 
 import org.junit.jupiter.api.Test;
 
