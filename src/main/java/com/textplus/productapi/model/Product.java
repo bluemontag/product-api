@@ -2,6 +2,7 @@ package com.textplus.productapi.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Product implements Serializable {
     
@@ -13,7 +14,7 @@ public class Product implements Serializable {
     public Product(int code, String name, BigDecimal price) {
         this.code = code;
         this.name = name;
-        this.price = price;
+        this.price = price.setScale(2, RoundingMode.HALF_EVEN);
     }
 
     /**
@@ -75,9 +76,7 @@ public class Product implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Product other = (Product) obj;
-        if (code != other.code)
-            return false;
-        return true;
+        return (code == other.code);
     }
 
     @Override
