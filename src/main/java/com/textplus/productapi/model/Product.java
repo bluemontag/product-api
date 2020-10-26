@@ -4,12 +4,30 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class Product implements Serializable {
     
     private static final long serialVersionUID = -3943409050833554778L;
+
+    @NotNull(message = "Code must not be null")
+    @Positive(message = "Code must be a positive integer")
     private Integer code;
+    @NotBlank(message = "Name must not be blank")
+    @NotNull(message = "Name is mandatory")
     private String name;
+    @NotNull(message = "A product must have a non-null price")
     private BigDecimal price;
+
+    public Product() {
+        // utilizado por librería Jackson
+    }
 
     public Product(Integer code, String name, BigDecimal price) {
         this.code = code;
@@ -92,4 +110,15 @@ public class Product implements Serializable {
         return "Product [code=" + code + ", name=" + name + ", price=" + price + "]";
     }
 
+    @JsonIgnore
+    public String getJsonString() {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            // nothing here
+        }
+        return json;
+    }
 }
