@@ -17,7 +17,7 @@ public class OrderTests {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Test
-    public void givenOrderDataWhenCreatingThenHasRightPropertiesTest() {
+    public void givenOrderData_WhenCreating_ThenHasRightProperties() {
         // Given a date
         Date purchaseDate = new Date();
         // a buyer's email
@@ -36,7 +36,7 @@ public class OrderTests {
     }
 
     @Test
-    public void givenAnOrderWhenAddingProductsThenHasProductsWithSamePrices() {
+    public void givenAnOrder_WhenAddingProducts_ThenHasProductsWithSamePrices() {
         // Given a list of products
         List<Product> products = TestUtils.createRandomProductList(50);
         // and an order
@@ -53,5 +53,18 @@ public class OrderTests {
         logger.log(Level.INFO, "Test passed.");
     }
 
+    @Test
+    public void givenARandomOrder_WhenCalculatingTotal_ThenValueIsCorrect() {
+        // Given a list of products
+        List<Product> products = TestUtils.createRandomProductList(50);
+        // and an order
+        Order order = new Order("harry@email.com", new Date());
+
+        // When adding products to the order:
+        order.addProducts(products);
+
+        // Then total is equal to the products' total
+        TestUtils.assertOrderTotalIsTheSumOfAllProducts(order, products);
+    }
 
 }

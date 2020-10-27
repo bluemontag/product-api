@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 // import org.springframework.boot.test.context.SpringBootTest;
 
-// @SpringBootTest TODO: It loads all the Spring context (commented because it takes too long)
+// @SpringBootTest // It loads all the Spring context (commented because it takes too long)
 class ProductApiApplicationTests {
 
 	@Test

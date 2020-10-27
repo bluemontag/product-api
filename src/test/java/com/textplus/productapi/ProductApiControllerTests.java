@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import com.textplus.productapi.controller.ProductApiController;
+import com.textplus.productapi.controller.ProductsController;
 import com.textplus.productapi.model.Product;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ public class ProductApiControllerTests {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Autowired
-    private ProductApiController controller;
+    private ProductsController controller;
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,7 +53,7 @@ public class ProductApiControllerTests {
         // given an invalid product
         logger.log(Level.INFO, () -> "Testing Product : " + p);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/product")
+        mockMvc.perform(MockMvcRequestBuilders.post("/productsapi/product")
             .content(p.getJsonString())
             .contentType(json))
             .andExpect(MockMvcResultMatchers.status().isOk());
@@ -122,7 +122,7 @@ public class ProductApiControllerTests {
     public void givenAnInvalidProduct_WhenAdded_ThenBadRequestIsReturned(String invalidProductJSON) throws Exception {
         // given an invalid product
         logger.log(Level.INFO, () -> "Testing Product JSON: " + invalidProductJSON);
-        mockMvc.perform(MockMvcRequestBuilders.post("/product")
+        mockMvc.perform(MockMvcRequestBuilders.post("/productsapi/product")
             .content(invalidProductJSON)
             .contentType(json))
             .andExpect(MockMvcResultMatchers.status().isBadRequest());

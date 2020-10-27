@@ -1,6 +1,7 @@
 package com.textplus.productapi;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.textplus.productapi.model.Order;
 import com.textplus.productapi.model.Product;
@@ -79,9 +81,19 @@ public class TestUtils {
     }
 
     public static void assertContainTheSameProducts(List<Product> list1, List<Product> list2) {
+        assertEquals(list1.size(), list2.size());
         // for each product in the first list, check if it exists in the second
         list1.forEach( prod -> {
             assertTrue(list2.contains(prod));
         });
+    }
+
+    public static void assertOrderTotalIsTheSumOfAllProducts(Order order, List<Product> products) {
+        Stream<BigDecimal> productsPrices = products.stream().map( Product::getPrice );
+        BigDecimal productsTotal = productsPrices.reduce( new BigDecimal("0"), (v1,v2) -> v1.add(v2));
+
+        BigDecimal orderTotal = order.getOrderTotal();
+
+        assertEquals(orderTotal, productsTotal);
     }
 }

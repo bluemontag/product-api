@@ -1,4 +1,4 @@
-package com.textplus.productapi.controller;
+package com.textplus.productapi.model;
 
 import java.io.Closeable;
 import java.util.Collection;
@@ -9,15 +9,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import com.textplus.productapi.model.Product;
-
 import org.springframework.stereotype.Component;
-
+/**
+ * The products catalog
+ * 
+ */
 @Component
-public class ProductApiMemory implements Closeable {
+public class ProductsCatalogInMemory implements Closeable, IProductsCatalog {
 
-    // the product catalog
     private ConcurrentHashMap<Integer, Product> products = new ConcurrentHashMap<>();
     private ReadWriteLock lock = new ReentrantReadWriteLock();
     private ExecutorService executor = Executors.newFixedThreadPool(10);
@@ -41,7 +40,7 @@ public class ProductApiMemory implements Closeable {
         return result;
     }
 
-    public CompletableFuture<Boolean> existsInCatalog(Integer code) {
+    public CompletableFuture<Boolean> productExistsInCatalog(Integer code) {
         lock.readLock().lock();
 
         CompletableFuture<Boolean> result;
@@ -67,7 +66,7 @@ public class ProductApiMemory implements Closeable {
      */
     public CompletableFuture<Boolean> addProductToCatalog(Product p) {
 
-        return this.existsInCatalog(p.getCode()).thenApply( (Boolean exists) -> {
+        return this.productExistsInCatalog(p.getCode()).thenApply( (Boolean exists) -> {
 
             boolean addProduct = !exists.booleanValue();
 
@@ -78,6 +77,26 @@ public class ProductApiMemory implements Closeable {
                 lock.writeLock().unlock();
             }
             return addProduct;
+        });
+    }
+
+    /**
+     * Analog to addProduct, 
+     * but returns true when the Product p is not present in the memory map.
+     * 
+     */
+    public CompletableFuture<Boolean> updateProduct(Product p) {
+        return this.productExistsInCatalog(p.getCode()).thenApply( (Boolean exists) -> {
+
+            boolean update = exists.booleanValue();
+
+            if (update) {
+                lock.writeLock().lock();
+                // add the product
+                this.products.put(p.getCode(), p);
+                lock.writeLock().unlock();
+            }
+            return update;
         });
     }
 
@@ -96,6 +115,27 @@ public class ProductApiMemory implements Closeable {
         lock.writeLock().lock();
         products = new ConcurrentHashMap<>();
         lock.writeLock().unlock();
+    }
+
+    /**
+     * Returns True if the "code" key is found in the map.
+     * Removes the key value pair from the memory
+     * 
+     */
+    public CompletableFuture<Boolean> deleteProduct(Integer code) {
+
+        return this.productExistsInCatalog(code).thenApply( (Boolean exists) -> {
+
+            boolean deleteProduct = exists.booleanValue();
+
+            if (deleteProduct) {
+                lock.writeLock().lock();
+                // add the product
+                this.products.remove(code);
+                lock.writeLock().unlock();
+            }
+            return deleteProduct;
+        });
     }
 
     @Override
