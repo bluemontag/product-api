@@ -21,6 +21,20 @@ public class OrdersCatalogInMemory implements Closeable, IOrdersCatalog {
     private ConcurrentHashMap<String, Order> orders = new ConcurrentHashMap<>();
     private ExecutorService executor = Executors.newFixedThreadPool(10);
     
+    public CompletableFuture<List<Order>> getAllOrders() {
+
+        ordersLock.readLock().lock();
+        CompletableFuture<List<Order>> futureList = CompletableFuture.completedFuture(
+            this.orders.values().stream().collect(Collectors.toList())
+        );
+        ordersLock.readLock().unlock();
+
+        return futureList.thenApply( (List<Order> filteredOrders) -> {
+            Collections.sort(filteredOrders);
+            return filteredOrders;
+        });
+    }
+
     public CompletableFuture<Boolean> orderExistsInCatalog(String orderUUID) {
         ordersLock.readLock().lock();
 
@@ -61,7 +75,7 @@ public class OrdersCatalogInMemory implements Closeable, IOrdersCatalog {
         });
     }
 
-    public CompletableFuture<List<Order>> getAllOrdersBetween(Date beginDate, Date endDate) {
+    public CompletableFuture<List<Order>> getOrdersBetween(Date beginDate, Date endDate) {
 
         ordersLock.readLock().lock();
         CompletableFuture<List<Order>> futureList = CompletableFuture.completedFuture(

@@ -8,12 +8,21 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 public class Order implements Comparable<Order> {
 
+    @NotNull
     private UUID uuid;
+    @NotNull
+    @Email(message = "The buyers' email is not valid.")
     private String buyersEmail;
+    @NotNull
     private Date purchaseDate;
+    @NotNull
     private List<ProductInOrder> products;
+    @NotNull
     private BigDecimal total;
     
     public Order(String email, Date purchaseDate) {

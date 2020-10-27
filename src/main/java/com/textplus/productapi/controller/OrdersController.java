@@ -5,8 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import com.textplus.productapi.model.IOrdersCatalog;
@@ -16,6 +19,7 @@ import com.textplus.productapi.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,43 +29,75 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value="/ordersapi/")
+@Validated
 public class OrdersController {
+
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
+    public static final String SPANISH_DATE_FORMAT = "dd/MM/yyyy";
 
     @Autowired
     private IOrdersCatalog ordersCatalog;
     
     @GetMapping("/")
 	public String home() {
+        logger.log(Level.INFO, () -> "GET /ordersapi/ called.");
 		return "<h1>Welcome to the Orders API</h1>";
     }
 
+    @GetMapping("/orders")
+	public ResponseEntity<Collection<Order>> getAllOrders() {
+        logger.log(Level.INFO, () -> "GET /ordersapi/orders called.");
+        Collection<Order> result = this.ordersCatalog.getAllOrders().join();
+        logger.log(Level.INFO, () -> "return status code: 200 (OK), with list: " + result);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+    }
     /**
      * Get mapping for querying all the orders between two dates
      * @param beginDateStr Date string in format dd/MM/yyyy
      * @param endDateStr Date string in format dd/MM/yyyy
      * @return
      */
-	@GetMapping("/orders")
-	public ResponseEntity<Collection<Order>> getAllOrdersBetween(@NotNull String begin, @NotNull String end) {
+	@GetMapping("/ordersbetween")
+	public ResponseEntity<Collection<Order>> getOrdersBetween(@NotNull String begin, @NotNull String end) {
+        logger.log(Level.INFO, () -> "GET /ordersapi/ordersbetween called with begin: \"" + begin + "\" and end: \"" + end + "\"");
         Date beginDate;
         Date endDate;
         try {
-            beginDate = new SimpleDateFormat("dd/MM/yyyy").parse(begin);
-            endDate = new SimpleDateFormat("dd/MM/yyyy").parse(end);
+            beginDate = new SimpleDateFormat(SPANISH_DATE_FORMAT).parse(begin);
+            endDate = new SimpleDateFormat(SPANISH_DATE_FORMAT).parse(end);
         } catch (Exception e) {
+            logger.log(Level.INFO, () -> "return empty list with status code: 400 (Bad Request).");
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
-
-		return new ResponseEntity<>(this.ordersCatalog.getAllOrdersBetween(beginDate, endDate).join(), HttpStatus.OK);
+        Collection<Order> result = this.ordersCatalog.getOrdersBetween(beginDate, endDate).join();
+        logger.log(Level.INFO, () -> "return status code: 200 (OK), with list: " + result);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@PostMapping("/order")
-	public Boolean addOrder(@NotNull @Valid @RequestBody Order order) { 
-        return this.ordersCatalog.addOrderToCatalog(order).join();
+    public ResponseEntity<Boolean> addOrder(@NotNull @Email String email, @NotNull String purchaseDateStr) {
+        logger.log(Level.INFO, () -> "POST /ordersapi/order called with email: " + email + " and purchase date: " + purchaseDateStr);
+        Date purchaseDate;
+        try {
+            purchaseDate = new SimpleDateFormat(SPANISH_DATE_FORMAT).parse(purchaseDateStr);
+        } catch (Exception e) {
+            logger.log(Level.INFO, () -> "return status code: 400 (Bad Request).");
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+        // create order to generate UUID:
+        Order order = new Order(email, purchaseDate);
+        logger.log(Level.INFO, () -> "Order created: " + order.toString());
+        Boolean result = this.ordersCatalog.addOrderToCatalog(order).join();
+        logger.log(Level.INFO, () -> "return boolean: " + result);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
-    @PutMapping("/addProduct")
+    @PutMapping("/product")
 	public Boolean addProductToOrder(@NotNull String orderUUID, @Valid @RequestBody Product prod ) {
-        return this.ordersCatalog.addProductToOrder(orderUUID, prod).join();
+        logger.log(Level.INFO, () -> "PUT /ordersapi/product called with orderUUID: " + orderUUID + " and product: " + prod.toString());
+        Boolean result = this.ordersCatalog.addProductToOrder(orderUUID, prod).join();
+        logger.log(Level.INFO, () -> "return boolean: " + result);
+        return result;
     }
 }

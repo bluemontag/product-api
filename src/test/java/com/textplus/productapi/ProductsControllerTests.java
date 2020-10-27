@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProductApiControllerTests {
+public class ProductsControllerTests {
     
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
