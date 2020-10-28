@@ -8,7 +8,7 @@ To compile the project using maven, you can run the script "generate-jar.cmd" on
 
 ### mvn clean package
 
-This will compile the sources, execute the tests and if they pass, it will and generate the jar file.
+This will compile the sources, execute the tests and if they pass, it will generate the jar file.
 
 ## Running a local environment
 
