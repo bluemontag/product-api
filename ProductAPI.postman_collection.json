@@ -1,0 +1,313 @@
+{
+	"info": {
+		"_postman_id": "f908e879-9e2a-4a09-89e1-19ef337f727c",
+		"name": "ProductAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": 3,\r\n    \"price\": 388.99,\r\n    \"name\": \"Product C\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/productsapi/product",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"productsapi",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/productsapi/products",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"productsapi",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/productsapi/product?code=2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"productsapi",
+						"product"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": 1,\r\n    \"price\": 50.99,\r\n    \"name\": \"Product A\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/productsapi/product",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"productsapi",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Place Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/ordersapi/order?purchaseDateStr=13/06/2020&email=ignacio@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersapi",
+						"order"
+					],
+					"query": [
+						{
+							"key": "purchaseDateStr",
+							"value": "13/06/2020"
+						},
+						{
+							"key": "email",
+							"value": "ignacio@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Orders Between Dates",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/ordersapi/ordersbetween",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersapi",
+						"ordersbetween"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Orders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/ordersapi/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersapi",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product To Order",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": 1,\r\n    \"price\": 50.00,\r\n    \"name\": \"Product A\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/ordersapi/product?orderUUID=c7d0c178-188d-4246-8e51-bb9525a6b6bc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersapi",
+						"product"
+					],
+					"query": [
+						{
+							"key": "orderUUID",
+							"value": "c7d0c178-188d-4246-8e51-bb9525a6b6bc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
