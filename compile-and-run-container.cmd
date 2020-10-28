@@ -1,6 +1,5 @@
 @REM Generating and running the docker image
 @echo off
-
 echo.
 echo =====================================================================
 echo Cleaning previous compilation (empties /target folder)
@@ -27,4 +26,7 @@ echo =====================================================================
 echo Executing container...
 echo =====================================================================
 echo.
+
 docker run -p 8080:8080 productapi
+
+pause 0
