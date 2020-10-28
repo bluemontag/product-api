@@ -8,7 +8,10 @@ public interface IOrdersCatalog {
     
     public CompletableFuture<List<Order>> getAllOrders();
     public CompletableFuture<List<Order>> getOrdersBetween(Date beginDate, Date endDate);
+    public CompletableFuture<Order> getOrder(String orderUUID);
     public CompletableFuture<Boolean> addOrderToCatalog(Order order);
     public CompletableFuture<Boolean> orderExistsInCatalog(String orderUUID);
     public CompletableFuture<Boolean> addProductToOrder(String orderUUID, Product prod);
+    public CompletableFuture<Boolean> deleteOrder(String orderUUID);
+    public void deleteAllOrders();
 }

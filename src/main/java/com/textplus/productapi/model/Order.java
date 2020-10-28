@@ -11,10 +11,12 @@ import java.util.stream.Stream;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Order implements Comparable<Order> {
 
     @NotNull
-    private UUID uuid;
+    private String uuid;
     @NotNull
     @Email(message = "The buyers' email is not valid.")
     private String buyersEmail;
@@ -24,13 +26,17 @@ public class Order implements Comparable<Order> {
     private List<ProductInOrder> products;
     @NotNull
     private BigDecimal total;
+
+    public Order() {
+        // constructor utilizado por librería Jackson
+    }
     
     public Order(String email, Date purchaseDate) {
         this.buyersEmail = email;
         this.purchaseDate = purchaseDate;
         this.products = new ArrayList<>();
         this.total = new BigDecimal("0");
-        this.uuid = UUID.randomUUID();
+        this.uuid = UUID.randomUUID().toString();
     }
 
     /**
@@ -90,14 +96,15 @@ public class Order implements Comparable<Order> {
         products.forEach( this::addProduct );
     }
 
-    public BigDecimal getOrderTotal() {
+    public BigDecimal getTotal() {
         return this.total;
     }
 
-    public String getOrdersUUIDString() {
-        return this.uuid.toString();
+    public String getUuid() {
+        return this.uuid;
     }
 
+    @JsonIgnore
     @Override
     public String toString() {
         return "Order [buyersEmail=" + buyersEmail + ", products=" + products + ", purchaseDate=" + purchaseDate + "]";

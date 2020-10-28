@@ -1,6 +1,7 @@
 package com.textplus.productapi.controller;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +12,8 @@ import com.textplus.productapi.model.IProductsCatalog;
 import com.textplus.productapi.model.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +38,21 @@ public class ProductsController {
 		logger.log(Level.INFO, () -> "GET /productsapi/ called.");
 		return "<h1>Welcome to the Product API</h1>";
     }
-    
+	
+	@GetMapping("/product")
+	public ResponseEntity<Product> getProductWithCode(@NotNull Integer code) {
+		logger.log(Level.INFO, () -> "GET /productsapi/product called with code " + code);
+		Optional<Product> result = this.productsCatalog.getProductWithCode(code).join();
+
+		if (result.isPresent()) {
+			logger.log(Level.INFO, () -> "return Product: " + result + " with status code 200 OK.");
+			return new ResponseEntity<>(result.get(), HttpStatus.OK);
+		} else {
+			logger.log(Level.INFO, () -> "return status code 404 (NOT FOUND).");
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // NOSONAR
+		}
+	}
+
     @GetMapping("/products")
 	public Collection<Product> getAllProducts() {
 		logger.log(Level.INFO, () -> "GET /productsapi/products called.");
